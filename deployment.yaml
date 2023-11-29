@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: trivial-golang-k8s-deployment
+  labels:
+    app: trivial-golang-k8s-deployment
+spec:
+  containers:
+  - name: trivial-golang-k8s-deployment
+    image: ghcr.io/izumanetworks/trivial-golang-k8s-deployment:latest
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /hello
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 5
+  imagePullSecrets:
+    - name: regcred
