@@ -1,0 +1,18 @@
+FROM golang:1.20
+LABEL org.opencontainers.image.source=https://github.com/IzumaNetworks/trivial-golang-k8s-deployment
+LABEL org.opencontainers.image.description="Trivial Go K8s example DEBUG"
+LABEL org.opencontainers.image.licenses=Apache-2.0
+
+# golang container is based on Debian
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+# install rsync
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install rsync
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y clean
+
+ADD app /app
+ADD loop.sh /
+ENV CGO_ENABLED=0
+RUN cd /app && go build -o app .
+WORKDIR /app
+# just start a dummy loop to keep the container up
+ENTRYPOINT [ "/loop.sh" ]
