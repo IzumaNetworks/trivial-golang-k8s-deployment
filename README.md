@@ -48,8 +48,11 @@ docker buildx build --platform linux/amd64 --tag trivial-golang-k8s-deployment -
 
 _If you just want a test deployment using the original example - you can skip this_
 
-For deployment on K8s you will need to push the docker image to a registry. You _can't_ push to the registry for this repo, but these instructions will work if you forked this repo:
+Otherwise read: https://www.izumanetworks.com/blog/use-github-gitlab-for-docker-registry/
 
+## Step 3: Deploy to K8s
+
+For deployment on K8s you will need to push the docker image to a registry. You _can't_ push to the registry for this repo, but these instructions will work if you forked this repo:
 
 ```
 kubectl apply -f deployment.yaml
