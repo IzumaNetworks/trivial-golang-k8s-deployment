@@ -1,5 +1,7 @@
 Simple example golang app with a k8s deployment for use in other examples.
 
+This is good boilerplate code for starting a Golang project that will deploy on Kubernetes.
+
 ### This example is used by these tutorials / posts
 
 [Sync a pod with rsync for fast K8s ECT cycle](https://www.izumanetworks.com/blog/use-rsync-with-k8s/)
@@ -24,6 +26,12 @@ If on another arch, such as Apple Silicon etc.
 docker buildx build --platform linux/amd64 --tag trivial-golang-k8s-deployment --load .
 ```
 
+Or if need Cgo and you want an Alpine base image:
+
+```
+docker buildx build -f Dockerfile-cross-cgo-xx-alpine --platform linux/amd64 --tag trivial-golang-k8s-deployment --load .
+```
+
 To build the development images:
 
 ```
@@ -38,8 +46,38 @@ docker buildx build --platform linux/amd64 --tag trivial-golang-k8s-deployment -
 
 ## Step 2: Upload to some docker registry
 
-_If you just want to deploy the example - you can skip this_
+_If you just want a test deployment using the original example - you can skip this_
 
-For deployment on k8s you will need to push the docker image to a registry. You _can't_ push to the registry for this repo, but these instructions will work if you forked this repo:
+For deployment on K8s you will need to push the docker image to a registry. You _can't_ push to the registry for this repo, but these instructions will work if you forked this repo:
 
+
+```
+kubectl apply -f deployment.yaml
+```
+
+To apply our basic deployment.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: trivial-golang-k8s-deployment
+  labels:
+    app: trivial-golang-k8s-deployment
+spec:
+  containers:
+  - name: trivial-golang-k8s-deployment
+    image: ghcr.io/izumanetworks/trivial-golang-k8s-deployment:latest
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /hello
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 5
+  imagePullSecrets:
+    - name: regcred
+```
 
