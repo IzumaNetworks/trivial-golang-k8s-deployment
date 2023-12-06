@@ -1,0 +1,16 @@
+FROM --platform=$BUILDPLATFORM golang:1.20 AS build
+LABEL org.opencontainers.image.source=https://github.com/IzumaNetworks/trivial-golang-k8s-deployment
+LABEL org.opencontainers.image.description="Trivial Go K8s example"
+LABEL org.opencontainers.image.licenses=Apache-2.0
+# get gcc cross toolchain
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install g++-x86-64-linux-gnu libc6-dev-amd64-cross
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y clean
+
+ADD app /app
+ARG TARGETOS TARGETARCH
+ENV CGO_ENABLED=1
+WORKDIR /app
+# RUN gcc -dumpmachine
+RUN CC=x86_64-linux-gnu-gcc GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o app .
+ENTRYPOINT [ "/app/app" ]
