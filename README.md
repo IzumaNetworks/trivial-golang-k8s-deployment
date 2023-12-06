@@ -1,5 +1,12 @@
 Simple example golang app with a k8s deployment for use in other examples.
 
+### This example is used by these tutorials / posts
+
+Sync a pod with rsync for fast K8s ECT cycle: https://www.izumanetworks.com/blog/use-rsync-with-k8s/
+
+How to build a x86/amd64 docker container image on Apple silicon (or any other arch): https://www.izumanetworks.com/blog/build-docker-on-apple-m/
+
+Build, push and pull a container using Github GHCR or Gitlab Container Registry: https://www.izumanetworks.com/blog/use-github-gitlab-for-docker-registry/
 
 ## Step 1: Build docker images
 
